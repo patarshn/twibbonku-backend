@@ -27,7 +27,7 @@ class TwibbonContributorController extends BaseController
     public function getCampaigns(Request $request)
     {   
 
-        $twibbon = Twibbon::with(['tags','twibbon_images'])->paginate();
+        $twibbon = Twibbon::with(['tags','image'])->paginate();
         if(!$twibbon) return $this->sendErrorInternalResponse(null, "Fail get data", null);
 
         return $this->sendSuccessResponse($twibbon, "Success get twibbon");
@@ -35,7 +35,7 @@ class TwibbonContributorController extends BaseController
 
     public function getCampaignsById(Request $request, $id)
     {   
-        $twibbon = Twibbon::with(['tags','twibbon_images'])->find($id);
+        $twibbon = Twibbon::with(['tags','twibbon_images','image'])->find($id);
         if(!$twibbon) return $this->sendErrorInternalResponse(null, "Fail get data", null);
 
         return $this->sendSuccessResponse($twibbon, "Success get twibbon");
@@ -52,6 +52,9 @@ class TwibbonContributorController extends BaseController
 
         if($validator->fails()) return $this->sendErrorBadParamsResponse($validator->errors(), "Fail get data", null);
         
+        $twibbon = Twibbon::find($request->twibbon_id);
+        if(!$twibbon) return $this->sendErrorInternalResponse(null, "Fail get data", null);
+
         $file = $request->file('file');
 
         $imageName = time().'.'.$file->extension();
@@ -65,6 +68,11 @@ class TwibbonContributorController extends BaseController
         $twibbonImage->image_url = $path;
         $twibbonImage->created_by = Auth::user()->id;
         $twibbonImage->save();
+        
+        if (count($twibbon->twibbon_images) == 1){
+            $twibbon->image_id = $twibbonImage->id;
+            $twibbon->save();
+        }
 
         return $this->sendCreatedResponse($twibbonImage, "Success add image");
 

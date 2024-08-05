@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description')->default("");
             $table->string('slug')->unique();
             $table->string('keyword')->default("");
+            $table->bigInteger('image_id')->nullable();
             $table->smallInteger('twibbon_visibility_status')->default(0);
             $table->smallInteger('commentar_visibility_status')->default(0);
             $table->smallInteger('viewer_visibility_status')->default(0);

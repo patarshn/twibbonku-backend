@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TwibbonContributorController;
+use App\Http\Controllers\TwibbonUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +34,14 @@ Route::middleware(['auth:api'])->group(function () {
         Route::put('updateCampaign', [TwibbonContributorController::class, 'updateCampaign'])->name('updateCampaign');
     });
 
+    Route::post('createCampaignComment', [CommentController::class, 'createCampaignComment'])->name('createCampaignComment');
+    Route::get('deleteCampaignComment', [CommentController::class, 'deleteCampaignComment'])->name('deleteCampaignComment');
 });
 
+Route::get('getCampaignComment/{id}', [CommentController::class, 'getCampaignComment'])->name('getCampaignComment');
 
 
+Route::prefix('u')->name('u.')->group(function () {
+    Route::get('getCampaigns', [TwibbonUserController::class, 'getCampaigns'])->name('getCampaigns');
+    Route::get('getCampaigns/{id}', [TwibbonUserController::class, 'getCampaignsById'])->name('getCampaignsById');
+});

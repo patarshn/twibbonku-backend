@@ -21,4 +21,9 @@ class Twibbon extends Model
         return $this->hasMany(TwibbonImage::class);
     }
 
+    public function image()
+    {
+        return $this->belongsTo(TwibbonImage::class);
+    }
+
 }
