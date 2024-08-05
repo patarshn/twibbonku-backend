@@ -10,3 +10,15 @@ Route::get('/user', function (Request $request) {
 
 Route::post('register', [AuthController::class, 'register'])->name('register');
 Route::post('login', [AuthController::class, 'login'])->name('login');
+
+
+
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::post('updateProfile', [AuthController::class, 'updateProfile'])->name('updateProfile');
+    Route::get('getProfile', [AuthController::class, 'getProfile'])->name('getProfile');
+    Route::post('updatePassword', [AuthController::class, 'updatePassword'])->name('updatePassword');
+    Route::delete('softDeleteProfile', [AuthController::class, 'softDeleteProfile'])->name('softDeleteProfile');
+
+});
+
