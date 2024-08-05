@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('twibbon_comments', function (Blueprint $table) {
             $table->id();
             $table->string('content');
-            $table->bigInteger('campaign_id');
+            $table->bigInteger('twibbon_id');
             $table->bigInteger('parent_id')->nullable();
             $table->bigInteger('created_by');
             $table->timestamps();

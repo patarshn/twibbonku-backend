@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('twibbon_images', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("campaign_id");
+            $table->bigInteger("twibbon_id");
             $table->string('image_url');
             $table->bigInteger('created_by');
             $table->timestamps();

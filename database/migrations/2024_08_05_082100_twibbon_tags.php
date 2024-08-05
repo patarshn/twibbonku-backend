@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_tags', function (Blueprint $table) {
-            $table->bigInteger('post_id');
+        Schema::create('twibbon_tags', function (Blueprint $table) {
+            $table->bigInteger('twibbon_id');
             $table->bigInteger('tag_id');
         });
     }
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_tags');
+        Schema::dropIfExists('twibbon_tags');
     }
 };
