@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SuperCampaignController;
@@ -44,6 +45,19 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::post('createCampaignComment', [CommentController::class, 'createCampaignComment'])->name('createCampaignComment');
     Route::get('deleteCampaignComment', [CommentController::class, 'deleteCampaignComment'])->name('deleteCampaignComment');
+
+
+    Route::prefix('a')->name('a.')->group(function () {
+        Route::get('getMainDashboard', [AdminController::class, 'getMainDashboard'])->name('getMainDashboard');
+        Route::get('getContributors', [AdminController::class, 'getContributors'])->name('getContributors');
+        Route::post('updateContributor', [AdminController::class, 'updateContributor'])->name('updateContributor');
+        Route::delete('deleteContributor', [AdminController::class, 'deleteContributor'])->name('deleteContributor');
+
+        Route::get('getCampaigns', [AdminController::class, 'getCampaigns'])->name('getCampaigns');
+        Route::get('getSuperCampaigns', [AdminController::class, 'getSuperCampaigns'])->name('getSuperCampaigns');
+
+        Route::get('getCampaignsComment', [AdminController::class, 'getCampaignsComment'])->name('getCampaignsComment');
+    });
 });
 
 Route::get('getCampaignComment/{id}', [CommentController::class, 'getCampaignComment'])->name('getCampaignComment');

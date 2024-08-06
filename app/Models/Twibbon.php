@@ -32,4 +32,10 @@ class Twibbon extends Model
         return $this->belongsToMany(Tag::class, 'twibbon_keywords', 'twibbon_id', 'keyword_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(TwibbonComment::class);
+    }
+    
+
 }
