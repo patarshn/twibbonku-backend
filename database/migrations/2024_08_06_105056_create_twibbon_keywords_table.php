@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('twibbon_comments', function (Blueprint $table) {
-            $table->id();
-            $table->string('content');
+        Schema::create('twibbon_keywords', function (Blueprint $table) {
             $table->bigInteger('twibbon_id');
-            $table->bigInteger('parent_id')->nullable();
-            $table->bigInteger('created_by');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->bigInteger('keyword_id');
         });
     }
 
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('twibbon_comments');
+        Schema::dropIfExists('twibbon_keywords');
     }
 };

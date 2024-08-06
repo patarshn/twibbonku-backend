@@ -5,14 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TwibbonComment extends Model
+class SuperCampaign extends Model
 {
     use HasFactory;
-
-    public function replies()
-    {
-        return $this->hasMany(TwibbonComment::class, 'parent_id', 'id');
-    }
 
     public function twibbon()
     {

@@ -12,7 +12,7 @@ class TwibbonUserController extends BaseController
     {   
 
 
-        $twibbon = Twibbon::with(['tags','image']);
+        $twibbon = Twibbon::with(['tags','image', 'keywords']);
 
 
         $contributor_username = $request->string('contributor_username') ?? null;
@@ -31,7 +31,7 @@ class TwibbonUserController extends BaseController
 
     public function getCampaignsById(Request $request, $id)
     {   
-        $twibbon = Twibbon::with(['tags','twibbon_images','image'])->find($id);
+        $twibbon = Twibbon::with(['tags','twibbon_images','image', 'keywords'])->find($id);
         if(!$twibbon) return $this->sendErrorInternalResponse(null, "Fail get data", null);
 
         return $this->sendSuccessResponse($twibbon, "Success get twibbon");

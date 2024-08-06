@@ -24,6 +24,9 @@ return new class extends Migration
             $table->smallInteger('status')->default(0);
             $table->bigInteger('created_by');
             $table->timestamps();
+            $table->bigInteger('deleted_by')->nullable();
+            $table->string('deleted_role')->nullable();
+            $table->string('deleted_reason')->nullable();
             $table->softDeletes();
         });
     }

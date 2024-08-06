@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SuperCampaignController;
 use App\Http\Controllers\TwibbonContributorController;
 use App\Http\Controllers\TwibbonUserController;
 use Illuminate\Http\Request;
@@ -32,6 +33,13 @@ Route::middleware(['auth:api'])->group(function () {
         Route::delete('deleteCampaign', [TwibbonContributorController::class, 'deleteCampaign'])->name('deleteCampaign');
         Route::put('publishCampaign', [TwibbonContributorController::class, 'publishCampaign'])->name('publishCampaign');
         Route::put('updateCampaign', [TwibbonContributorController::class, 'updateCampaign'])->name('updateCampaign');
+        Route::get('getDeletedCampaigns', [TwibbonContributorController::class, 'getDeletedCampaigns'])->name('getDeletedCampaigns');
+
+        Route::get('getCampaignComment', [CommentController::class, 'getCampaignCommentByContributorId'])->name('getCampaignCommentByContributorId');
+
+        Route::post('addSuperCampaigns', [SuperCampaignController::class, 'addSuperCampaigns'])->name('addSuperCampaigns');
+        Route::get('getSuperCampaigns', [SuperCampaignController::class, 'getSuperCampaigns'])->name('getSuperCampaigns');
+        Route::get('getSuperCampaigns/{id}', [SuperCampaignController::class, 'getSuperCampaignsById'])->name('getSuperCampaignsById');
     });
 
     Route::post('createCampaignComment', [CommentController::class, 'createCampaignComment'])->name('createCampaignComment');

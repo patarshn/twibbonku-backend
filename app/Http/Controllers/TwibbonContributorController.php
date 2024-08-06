@@ -27,7 +27,15 @@ class TwibbonContributorController extends BaseController
     public function getCampaigns(Request $request)
     {   
 
-        $twibbon = Twibbon::with(['tags','image'])->paginate();
+        $twibbon = Twibbon::with(['tags','image', 'keywords'])->paginate();
+        if(!$twibbon) return $this->sendErrorInternalResponse(null, "Fail get data", null);
+
+        return $this->sendSuccessResponse($twibbon, "Success get twibbon");
+    }
+    public function getDeletedCampaigns(Request $request)
+    {   
+
+        $twibbon = Twibbon::with(['tags','image', 'keywords'])->withTrashed()->paginate();
         if(!$twibbon) return $this->sendErrorInternalResponse(null, "Fail get data", null);
 
         return $this->sendSuccessResponse($twibbon, "Success get twibbon");
@@ -35,7 +43,7 @@ class TwibbonContributorController extends BaseController
 
     public function getCampaignsById(Request $request, $id)
     {   
-        $twibbon = Twibbon::with(['tags','twibbon_images','image'])->find($id);
+        $twibbon = Twibbon::with(['tags','twibbon_images','image', 'keywords'])->withTrashed()->find($id);
         if(!$twibbon) return $this->sendErrorInternalResponse(null, "Fail get data", null);
 
         return $this->sendSuccessResponse($twibbon, "Success get twibbon");
@@ -107,7 +115,11 @@ class TwibbonContributorController extends BaseController
         $twibbon = Twibbon::find($request->id);
         if(!$twibbon) return $this->sendErrorBadParamsResponse(null, "Fail get data", null);
 
-        if(!$twibbon->delete()) return $this->sendErrorInternalResponse(null, "Fail delete data", null);
+        $twibbon->deleted_at = now();
+        $twibbon->deleted_by = Auth::user()->id;
+        $twibbon->deleted_role = Auth::user()->role;
+
+        if(!$twibbon->save()) return $this->sendErrorInternalResponse(null, "Fail delete data", null);
 
         return $this->sendSuccessResponse($twibbon, "Success get twibbon");
     }
@@ -135,24 +147,34 @@ class TwibbonContributorController extends BaseController
         $collectionTags = collect($request->tags);
         $tagsUnique = $collectionTags->unique();
 
+        $collectionKeywords = collect($request->keywords);
+        $keywordsUnique = $collectionKeywords->unique();
+
         $twibbon->title = $request->title;
         $twibbon->description = $request->description;
         // $twibbon->slug = $request->slug;
-        $twibbon->keyword = $request->keyword;
+        // $twibbon->keyword = $request->keyword;
         $twibbon->twibbon_visibility_status = $request->twibbon_visibility_status;
         $twibbon->commentar_visibility_status = $request->commentar_visibility_status;
         $twibbon->viewer_visibility_status = $request->viewer_visibility_status;
         $twibbon->status = $request->status;
         
         try{
-            DB::transaction(function () use ($tagsUnique, $twibbon) {
+            DB::transaction(function () use ($tagsUnique, $keywordsUnique, $twibbon) {
                 $tagIds = [];
                 foreach($tagsUnique as $t){
                     $tag = Tag::firstOrCreate(['name' => $t]);
                     $tagIds[] = $tag->id;
                 }
 
+                $keywordIds = [];
+                foreach($keywordsUnique as $t){
+                    $keyword = Tag::firstOrCreate(['name' => $t]);
+                    $keywordIds[] = $keyword->id;
+                }
+
                 $twibbon->tags()->sync($tagIds);
+                $twibbon->keywords()->sync($keywordIds);
                 $twibbon->save();
     
             }, 1);

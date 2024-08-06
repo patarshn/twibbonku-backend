@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Twibbon extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $hidden = ['pivot'];
 
@@ -24,6 +25,11 @@ class Twibbon extends Model
     public function image()
     {
         return $this->belongsTo(TwibbonImage::class);
+    }
+
+    public function keywords()
+    {
+        return $this->belongsToMany(Tag::class, 'twibbon_keywords', 'twibbon_id', 'keyword_id');
     }
 
 }
